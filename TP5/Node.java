@@ -1,14 +1,5 @@
 import java.util.ArrayList;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-/**
- *
- * @author maitr
- */
 public class Node {
 
 	public int ordre;
@@ -83,13 +74,13 @@ public class Node {
     	this.parent= parent.parent;
     	parent.parent=this;
     	
-    	this.ordre=parent.ordre;
-    	parent.ordre=ordre;
+    	this.ordre = parent.ordre;
+    	parent.ordre = ordre;
     	
-    	this.enfants=parent.enfants;
+    	this.enfants = parent.enfants;
     	this.enfants.add(parent);
     	this.enfants.remove(this);
-    	parent.enfants=enfants;
+    	parent.enfants = enfants;
     	if(this.parent != null) {
     		this.parent.enfants.add(this);
     		this.parent.enfants.remove(parent);
