@@ -62,7 +62,7 @@ public class Node {
         		return parent;
         	}
         }
-        else  throw new DifferentOrderTrees();
+        else throw new DifferentOrderTrees();
 	}
 
 	private void moveUp() {
