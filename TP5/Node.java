@@ -47,7 +47,7 @@ public class Node {
 	}
 
 	public Node fusion(Node autre) throws DifferentOrderTrees {
-		// A completer
+		
         if (autre != null && ordre == autre.ordre ){
         	if (valeur > autre.valeur){
         		autre.parent = this;
@@ -66,7 +66,7 @@ public class Node {
 	}
 
 	private void moveUp() {
-		// A completer
+		
 		ArrayList<Node> enfants = this.enfants;
     	Node parent = this.parent;
     	int ordre= this.ordre;
@@ -88,13 +88,14 @@ public class Node {
 	}
 
 	public ArrayList<Node> delete() {
+
 		while(this.parent != null) this.moveUp();
 		for(int i = 0; i < this.enfants.size(); i++) this.enfants.get(i).parent = null;
 		return this.enfants;
 	}
 
 	public Node findValue(int valeur) {
-		// A completer
+		
 		if (this.valeur == valeur)
 			return this;
 		else if ( this.valeur > valeur) {
@@ -107,6 +108,7 @@ public class Node {
 	}
 
 	public ArrayList<Integer> getElementsSorted() {
+		
     	ArrayList<Integer> valeurs = new ArrayList<Integer>();
     	valeurs.add(valeur);
     	ArrayList<Node> nodeList = getEnfants();

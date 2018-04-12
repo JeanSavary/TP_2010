@@ -9,98 +9,127 @@ public class Monceau {
 		arbres = new ArrayList<Node>();
 	}
 
-	public void fusion(Monceau autre) {
-
+	public void fusion(Monceau autre) 
+	{
 		Monceau retenue = new Monceau();
-		int maxOrder = Math.max(this.maxOrder(),autre.maxOrder());
-	
-		for (int j=0; j<maxOrder+1 ; j++)
+		ArrayList<Node> finalTrees = new ArrayList<Node>();
+		int order = 0;
+
+		while(this.arbres.size() !=0 || autre.arbres.size() != 0 )
 		{
-			//ArrayList<Node> nodesOfSameOrder = new ArrayList<Node>();
-			Hashtable<String,ArrayList<Node>> nodesOfSameOrder = new Hashtable<String,ArrayList<Node>>();
-			nodesOfSameOrder.put(String.valueOf(j),new ArrayList<Node>());
-			int orderCount = 0;
-			Node tmpNode = null;
+			ArrayList<Node> nodesOfSameOrder = new ArrayList<Node>(); //will contain nodes of a same specifif order at each iteration
+			int counter = 0; //will count the number of nodes of same order
 
-			for (Node node : this.arbres)
-			{
-				if (node.ordre == j)
-				{
-					nodesOfSameOrder.get(String.valueOf(j)).add(node);
-					tmpNode = node;
-					orderCount ++;
-				}
-			}
+			//System.out.println("Is there a node of order : " + order + " in this ?");
+			Node nodeThis = popNodeOfOrder(this.arbres, order);
+			//System.out.println("Is there a node of order : " + order + " in autre ?");
+			Node nodeAutre = popNodeOfOrder(autre.arbres, order);
+			//System.out.println("Is there a node of order : " + order + " in retenue ?");
+			Node nodeRetenue = popNodeOfOrder(retenue.arbres, order);
 
-			for (Node node : autre.arbres)
-			{
-				if (node.ordre == j)
-				{
-					nodesOfSameOrder.get(String.valueOf(j)).add(node);
-					orderCount ++;
-				}
-			}
+			if (nodeThis != null)
+				nodesOfSameOrder.add(nodeThis);
+			if (nodeAutre != null)
+				nodesOfSameOrder.add(nodeAutre);
+			if (nodeRetenue!= null)
+				nodesOfSameOrder.add(nodeRetenue);
 
-			for (Node node : retenue.arbres)
-			{
-				if (node.ordre == j)
+			counter = nodesOfSameOrder.size();
+			try {
+				switch (counter)
 				{
-					nodesOfSameOrder.get(String.valueOf(j)).add(node);
-					orderCount ++;
+					case 0:
+						break;
+
+					case 1:
+						finalTrees.add(nodesOfSameOrder.get(0));
+						break;
+
+					case 2:
+						retenue.arbres.add(nodesOfSameOrder.get(0).fusion(nodesOfSameOrder.get(1)));
+						break;
+					
+					case 3:
+						retenue.arbres.add(nodesOfSameOrder.get(0).fusion(nodesOfSameOrder.get(1)));
+						finalTrees.add(nodesOfSameOrder.get(2));
+						break;
+
+					default :
+						break;
 				}
-			}
-			
-			switch(orderCount){
-				case 1:
-					if (tmpNode == null)//le monceau ne contient pas un noeud d'ordre j
-						{
-							this.arbres.add(nodesOfSameOrder.get(String.valueOf(j)).get(0));
-						}
-					break;
-				case 2:
-					retenue.arbres.add(nodesOfSameOrder.get(String.valueOf(j)).get(0).fusion(nodesOfSameOrder.get(String.valueOf(j)).get(1)));//on ajoute la fusion des deux arbres d'ordre j à la fusion
-					if (tmpNode != null) //le monceau contient un noeud d'odre j
-						{
-							this.arbres.remove(tmpNode);
-						}
-					break;
-				case 3:
-					retenue.arbres.add(nodesOfSameOrder.get(String.valueOf(j)).get(1).fusion(nodesOfSameOrder.get(String.valueOf(j)).get(2)));//le premier element correspond à l'arbre d'ordre j que l'on laisse dans le monceau final
-					break; 
-			}
-	
+			}catch(DifferentOrderTrees e){}
+
+			order ++;
+		}
+		
+		if (retenue.arbres.size() != 0)
+		{
+			finalTrees.add(retenue.arbres.get(0)); //it could remains one fusioned node in retenue
+		}
+
+		if (this.arbres.size() != 0) //normally it would never be the case ...
+		{
+			this.arbres.removeAll(this.arbres); 
+		}
+
+		for (Node node : finalTrees)
+		{
+			this.arbres.add(node);
 		}
 
 	}
 
-	public void insert(int val) {
-		// A completer
+
+	public void insert(int val) 
+	{
+        Node node = new Node(val);
+        Monceau monceau = new Monceau();
+        monceau.arbres.add(node);
+        this.fusion(monceau);
 	}
 
-	public boolean delete(int val) {
-		// A completer
-		return false;
+	public boolean delete(int val) 
+	{
+		boolean check = false;
+		for(int i = 0; i < this.arbres.size(); i++) {
+			Node tmp=this.arbres.get(i).findValue(val);
+			if ( tmp != null ) {
+				ArrayList<Node> array = tmp.delete();
+				this.arbres.remove(i);
+				Monceau monceau = new Monceau();
+				monceau.arbres = array;
+				this.fusion(monceau);
+				check = true;
+				this.delete(val);
+				break;
+			}
+		}
+		return check;
 	}
 
-	public void print() {
+	public void print() 
+	{
 		for (Node node : arbres) {
 			System.out.println("\n\nordre : " + node.ordre);
 			node.print();
 		}
 	}
-
-	private int maxOrder()
+	
+	public Node popNodeOfOrder(ArrayList<Node> tree, int order)
 	{
-		int tmpMax = 0;
-		for (Node node : arbres)
+		for (Node node : tree)
 		{
-			if (node.ordre > tmpMax)
+			if (node.ordre == order)
 			{
-				tmpMax = node.ordre;
+				//System.out.println("Found a node of order : " + order + " !");
+				tree.remove(node); //we don't need this node anymore
+				//System.out.println("Node removed !");
+				return node;
 			}
 		}
-		return tmpMax;
+		return null; //there is 1 or 0 node of a specific order in a heap
 	}
+	
 
 
 }

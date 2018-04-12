@@ -22,15 +22,16 @@ public class main {
 		try {
 
 			a = a.fusion(b); // 3-4
+		
 			// Decommenter pour tester l'emission d'exception
 			// a = a.fusion(c); // 3-4-5 -> EXCEPTION (ordres differents)
 			c = c.fusion(f); // 5-9
 			c = c.fusion(a); // 3-4-5-9
-
 			g = g.fusion(h); // 12-13
 			d = d.fusion(e); // 7-8
 			d = d.fusion(g); // 7-8-12-13
 			c = c.fusion(d); // 3-4-5-9-7-8-12-13
+
 
 		} catch (DifferentOrderTrees exception) {
 			System.out.println(exception);
@@ -83,46 +84,32 @@ public class main {
 		// TEST DU MONCEAU : INSERT
 		System.out.println("\nTEST DE MONCEAU.INSERT(), FUSION() ET PRINT()\n");
 
-		Monceau monceau1 = new Monceau();
-		Monceau monceau2 = new Monceau();
-		ArrayList<Node> test1 = new ArrayList<Node>();
-		test1.add(a);
-		test1.add(b);
-		ArrayList<Node> test2 = new ArrayList<Node>();
-		test2.add(d);
-		test2.add(c);
-		test2.add(e);
-		System.out.println("Ordre de c : ");
-		System.out.println(c.ordre);
-		monceau1.arbres = test1;
-		monceau2.arbres = test2;
-		System.out.println("Ordres des arbres dans");
-		monceau1.fusion(monceau2);
-		// monceau.insert(9);
-		// monceau.insert(5);
-		// monceau.insert(17);
-		// monceau.insert(21);
-		// monceau.insert(99);
-		// monceau.insert(12);
-		// monceau.insert(77);
-		// monceau.insert(12);
-		// monceau.insert(23);
-		// monceau.insert(23);
-		// monceau.insert(24);
-		// monceau.insert(33);
-		// monceau.insert(53);
+		Monceau monceau = new Monceau();
+		monceau.insert(9);
+		monceau.insert(5);
+		monceau.insert(17);
+		monceau.insert(21);
+		monceau.insert(99);
+		monceau.insert(12);
+		monceau.insert(77);
+		monceau.insert(12);
+		monceau.insert(23);
+		monceau.insert(23);
+		monceau.insert(24);
+		monceau.insert(33);
+		monceau.insert(53);
 
 		// Affichage du monceau
-		// monceau.print();
+		monceau.print();
 
 		// // TEST DU MONCEAU : DELETE
-		// System.out.println("\nTEST DE MONCEAU.DELETE()\n");
+		System.out.println("\nTEST DE MONCEAU.DELETE()\n");
 
-		// System.out.println("Suppression de 1 :" + monceau.delete(1));
-		// System.out.println("Suppression de 12 :" + monceau.delete(12));
+		System.out.println("Suppression de 1 :" + monceau.delete(1));
+		System.out.println("Suppression de 12 :" + monceau.delete(12));
 
-		// System.out.println("Resultat :");
-		// monceau.print();
+		System.out.println("Resultat :");
+		monceau.print();
 
 	}
 }
