@@ -3,6 +3,7 @@ package CircularDeps;
 import java.util.HashSet;
 
 public class CodeBase {
+    
     private SourceFile[] sourceFiles;
 
     public CodeBase(SourceFile[] sourceFiles)
